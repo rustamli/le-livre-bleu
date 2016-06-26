@@ -21,7 +21,7 @@ var config = {
     resolve: {
         extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
         alias: {
-            'graphs': path.join(__dirname, '/graphs'),
+            'graphs': path.join(__dirname, '/_graphs'),
         }
     }
 };

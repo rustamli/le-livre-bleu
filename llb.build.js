@@ -45,17 +45,73 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	// dijkstra = require('./graphs/dijkstra/dijkstra.ts').dijkstra;
+	dijkstra = __webpack_require__(1).dijkstra;
 	bfs = __webpack_require__(4).default;
+	dfs = __webpack_require__(5).default;
 	
 	// dijkstra('A', 'C');
 	
 	bfs('A', function (node) {
 	    console.log(node + '>');
 	});
+	
+	console.log('---');
+	
+	
+	dfs('A', function (node) {
+	    console.log(node + '>');
+	});
 
 /***/ },
-/* 1 */,
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var INFINITY = 100000;
+	var graph_ts_1 = __webpack_require__(2);
+	var Collections = __webpack_require__(3);
+	function dijkstra(source, target) {
+	    var unvisited = new Collections.Set(), dist = {}, prev = {};
+	    graph_ts_1.default.nodes.forEach(function (node) {
+	        dist[node] = INFINITY;
+	        prev[node] = null;
+	        unvisited.add(node);
+	    });
+	    dist[source] = 0;
+	    var currentNode = source, pathExists = true;
+	    while (currentNode != target) {
+	        unvisited.remove(currentNode);
+	        graph_ts_1.default.doWithConnectedNodes(currentNode, function (node, weight) {
+	            var distFromCurrentNode = dist[currentNode] + weight;
+	            if (dist[node] > distFromCurrentNode) {
+	                dist[node] = distFromCurrentNode;
+	                prev[node] = currentNode;
+	            }
+	        });
+	        currentNode = null;
+	        unvisited.forEach(function (node) {
+	            if (!currentNode || dist[currentNode] > dist[node]) {
+	                currentNode = node;
+	            }
+	        });
+	        if (dist[currentNode] === INFINITY) {
+	            console.log('No path was found');
+	            pathExists = false;
+	            break;
+	        }
+	    }
+	    if (pathExists) {
+	        while (currentNode != source) {
+	            console.log(currentNode);
+	            currentNode = prev[currentNode];
+	        }
+	        console.log(source);
+	    }
+	}
+	exports.dijkstra = dijkstra;
+
+
+/***/ },
 /* 2 */
 /***/ function(module, exports) {
 
@@ -2731,8 +2787,8 @@
 	    visited.add(startNode);
 	    queue.enqueue(startNode);
 	    while (!queue.isEmpty()) {
-	        var node = queue.dequeue();
-	        graph_ts_1.default.doWithConnectedNodes(node, function (connectedNode) {
+	        var current = queue.dequeue();
+	        graph_ts_1.default.doWithConnectedNodes(current, function (connectedNode) {
 	            if (!visited.contains(connectedNode)) {
 	                visit(connectedNode);
 	                visited.add(connectedNode);
@@ -2743,6 +2799,31 @@
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = bfs;
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var graph_ts_1 = __webpack_require__(2);
+	var Collections = __webpack_require__(3);
+	function dfs(startNode, visit) {
+	    var visited = new Collections.Set(), search = function (node) {
+	        graph_ts_1.default.doWithConnectedNodes(node, function (connectedNode) {
+	            if (!visited.contains(connectedNode)) {
+	                visit(connectedNode);
+	                visited.add(connectedNode);
+	                search(connectedNode);
+	            }
+	        });
+	    };
+	    visit(startNode);
+	    visited.add(startNode);
+	    search(startNode);
+	}
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = dfs;
 
 
 /***/ }

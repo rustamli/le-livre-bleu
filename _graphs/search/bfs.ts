@@ -12,9 +12,9 @@ export default function bfs(startNode: string, visit: Function) {
     queue.enqueue(startNode);
 
     while (!queue.isEmpty()) {
-        let node = queue.dequeue();
+        let current = queue.dequeue();
 
-        Graph.doWithConnectedNodes(node, function (connectedNode: string) {
+        Graph.doWithConnectedNodes(current, function (connectedNode: string) {
             if (!visited.contains(connectedNode)) {
                 visit(connectedNode);
                 visited.add(connectedNode);
