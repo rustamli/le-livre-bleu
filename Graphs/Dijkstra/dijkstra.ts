@@ -25,7 +25,7 @@ function dijkstra(source, target) {
 
         unvisited.remove(currentNode);
 
-        Graph.doWithConnectedNodes(currentNode, function (node, weight) {
+        Graph.doWithConnectedNodes(currentNode, (node: string, weight: number) => {
             var distFromCurrentNode = dist[currentNode] + weight;
             if (dist[node] > distFromCurrentNode) {
                 dist[node] = distFromCurrentNode;
@@ -57,5 +57,5 @@ function dijkstra(source, target) {
 }
 
 
-dijkstra('A', 'C');
+export { dijkstra }
 
