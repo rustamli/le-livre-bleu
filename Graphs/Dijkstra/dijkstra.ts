@@ -1,31 +1,12 @@
 
 const INFINITY = 100000;
 
-const Graph = {
-
-    nodes: ['A', 'B', 'C'],
-    
-    A: {
-        B: 2,
-        C: 4
-    },
-
-    B: {
-        C: 56,
-        A: 2
-    },
-
-    doWithConnectedNodes: function (node, fn) {
-        var nodeDetails = Graph[node];
-        return Object.keys(nodeDetails).forEach(function (key) {
-            fn(key, nodeDetails[key]);        
-        });
-    }
-};
+import Graph from '../graph.ts';
+import * as Collections from 'typescript-collections';
 
 function dijkstra(source, target) {
 
-    var unvisited = new Set(),
+    var unvisited = new Collections.Set(),
         dist = {},
         prev = {};
 
@@ -36,14 +17,13 @@ function dijkstra(source, target) {
         unvisited.add(node);
     });
 
-
     dist[source] = 0;
     var currentNode = source,
         pathExists = true;
 
     while (currentNode != target) {
 
-        unvisited.delete(currentNode);
+        unvisited.remove(currentNode);
 
         Graph.doWithConnectedNodes(currentNode, function (node, weight) {
             var distFromCurrentNode = dist[currentNode] + weight;
@@ -54,7 +34,7 @@ function dijkstra(source, target) {
         });
 
         currentNode = null;
-        unvisited.forEach(function (node) {
+        unvisited.forEach(function (node: string) {
             if (!currentNode || dist[currentNode] > dist[node]) {
                 currentNode = node;
             }
